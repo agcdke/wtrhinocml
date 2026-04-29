@@ -71,7 +71,7 @@ cuda:
   # "0"     = single GPU
   # "0,1"   = multi-GPU (DDP)
   # "cpu"   = CPU only
-  visible_devices: "coarse_dropout_p"
+  visible_devices: "0"
 
   # Device passed to YOLO .train() / .val()
   device: "0"
