@@ -1,0 +1,179 @@
+# ─────────────────────────────────────────────────────────────
+# WildTrack Rhino YOLO26 Training Config (NVIDIA CUDA)
+# Every value here maps 1:1 to a TrainConfig field.
+# ─────────────────────────────────────────────────────────────
+
+# ── Model ──
+model_variant: "yolo26m.pt"
+pretrained: true
+task: "detect"
+
+# ── Data ──
+data_yaml: "https://wildtrack-rhino-dataset.s3.us-east-1.amazonaws.com/yolo/rhino_dataset.yaml"
+imgsz: 640
+
+# ── Training schedule ──
+epochs: 100
+batch: 8
+workers: 1
+patience: 50      # = epochs/2
+save_period: 10   # = epochs/10
+
+# ── Optimizer ──
+optimizer: "AdamW"
+lr0: 0.001
+lrf: 0.01
+momentum: 0.937
+weight_decay: 0.0005
+warmup_epochs: 3.0
+warmup_bias_lr: 0.1
+
+# ── YOLO built-in augmentation ──
+hsv_h: 0.015
+hsv_s: 0.7
+hsv_v: 0.4
+degrees: 0.0
+translate: 0.1
+scale: 0.5
+shear: 0.0
+flipud: 0.0
+fliplr: 0.0
+mosaic: 1.0
+mixup: 0.1
+copy_paste: 0.1
+close_mosaic: 10
+
+# ── Regularization & imbalance ──
+multi_scale: False
+dropout: 0.0
+cls_pw: 0.25            # 0.0=disabled, 0.25=gentle, 1.0=full inverse-frequency
+
+# ── Validation ──
+val: true
+test_split: "test"
+
+# ── ClearML project ──
+project_name: "rhino-detection"
+task_name: "rhino-yolo26m-training-augmented"
+output_dir: "runs/detect"
+
+# ── Preview grid ──
+preview_samples: 4
+preview_augs: 4
+preview_thumb: 200
+
+
+# ─────────────────────────────────────────────────────────────
+# NVIDIA CUDA GPU
+# ─────────────────────────────────────────────────────────────
+cuda:
+  # GPU IDs visible to the process (CUDA_VISIBLE_DEVICES)
+  # "0"     = single GPU
+  # "0,1"   = multi-GPU (DDP)
+  # "cpu"   = CPU only
+  visible_devices: "coarse_dropout_p"
+
+  # Device passed to YOLO .train() / .val()
+  device: "0"
+
+  # Automatic Mixed Precision (FP16) — needs Tensor Core GPU (Volta+)
+  amp: true
+
+  # cuDNN benchmark — faster when input sizes don't change
+  cudnn_benchmark: true
+
+  # cuDNN deterministic — reproducible but slightly slower
+  cudnn_deterministic: false
+
+  # TF32 matmul on Ampere+ GPUs (A100, RTX 30xx/40xx/50xx)
+  allow_tf32: true
+
+
+# ─────────────────────────────────────────────────────────────
+# Dataset
+# ─────────────────────────────────────────────────────────────
+dataset:
+  name: "Rhino-YOLO"
+  description: "WildTrack Rhino YOLO (train/val/test)"
+  classes:
+    - rhinoBlack
+    - rhinoWhite
+  register_enabled: true
+
+
+# ─────────────────────────────────────────────────────────────
+# Albumentations Augmentation Pipeline
+# ─────────────────────────────────────────────────────────────
+augmentation:
+  pipeline_p: 0.8
+
+  enable_flip: true
+  flip_lr_p: 0.5
+  flip_ud_p: 0.0
+
+  enable_rotate: true
+  rotate_limit: 15.0
+  rotate_p: 0.4
+
+  enable_affine: true
+  shear_limit: 5.0
+  affine_p: 0.3
+
+  enable_perspective: true
+  perspective_scale: 0.05
+  perspective_p: 0.3
+
+  enable_crop: true
+  random_crop_p: 0.2
+  crop_min_area: 0.7
+
+  enable_distortion: true
+  elastic_p: 0.1
+  grid_distort_p: 0.1
+
+  enable_color_jitter: true
+  brightness_limit: 0.3
+  contrast_limit: 0.3
+  color_jitter_p: 0.5
+
+  enable_hsv: true
+  hue_shift_limit: 15
+  sat_shift_limit: 30
+  val_shift_limit: 20
+  hsv_p: 0.4
+
+  enable_grayscale: true
+  grayscale_p: 0.05
+
+  enable_blur: true
+  gaussian_blur_p: 0.2
+  motion_blur_p: 0.15
+  median_blur_p: 0.1
+
+  enable_noise: true
+  gaussian_noise_p: 0.2
+  iso_noise_p: 0.1
+
+  enable_sharpen: true
+  sharpen_p: 0.2
+
+  enable_clahe: true
+  clahe_p: 0.2
+
+  enable_dropout: true
+  coarse_dropout_p: 0.15
+  dropout_max_holes: 8
+  dropout_max_height: 32
+  dropout_max_width: 32
+
+  enable_shadow: true
+  random_shadow_p: 0.3
+
+  enable_fog: true
+  random_fog_p: 0.05
+
+  enable_rain: true
+  random_rain_p: 0.05
+
+  enable_sunflare: true
+  sun_flare_p: 0.05

@@ -1,0 +1,8 @@
+torch
+numpy
+opencv-python
+pyyaml
+psutil
+clearml
+ultralytics
+albumentations

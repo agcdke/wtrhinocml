@@ -1,0 +1,139 @@
+# ─────────────────────────────────────────────────────────────
+# Hyperparameter Optimization Config (NVIDIA CUDA)
+# ─────────────────────────────────────────────────────────────
+
+# ── Base task (the training run to clone & modify) ──
+base_task_project: "rhino-detection"
+base_task_name:    "rhino-yolo26m-training-augmented"
+base_task_id:      ""  # Leave empty to auto-resolve from project+name
+repository:        "https://github.com/agcdke/wtrhinocml.git"
+branch:            "main"
+entry_point:       "src/objdet/train_yolo_rhino_objdet.py"
+working_dir:       "."
+
+# ── HPO task metadata ──
+hpo_project_name:  "HPO-rhino-detection"
+hpo_task_name:     "HPO-yolo26m-wildtrack-rhino"
+
+# ── Objective metric ──
+# Must match what train_yolo_objdet.py logs via report_single_value
+objective_metric_title:  "metrics"
+objective_metric_series: "mAP50(B)"
+objective_metric_sign:   "max"
+
+# ── Execution ──
+execution_queue:         "default"
+max_iter_per_job:        30
+min_iter_per_job:        5
+max_concurrent_tasks:    1
+total_max_jobs:          30
+time_limit_per_job_min:  120.0
+pool_period_min:         5.0
+
+# ── Search strategy: "optuna", "bohb", "random", "grid" ──
+search_strategy: "optuna"
+
+# ── Top experiments to report ──
+top_k: 5
+
+
+# ─────────────────────────────────────────────────────────────
+# Search Space
+# ─────────────────────────────────────────────────────────────
+#
+# Parameter naming:
+#   "General/<key>" → maps to task.connect({...}, name="General")
+#
+# Types:
+#   uniform      → float [min, max] with step
+#   log_uniform  → float [min, max] log-scale (good for LR)
+#   uniform_int  → int [min, max] with step
+#   discrete     → explicit list of values
+#
+search_space:
+
+  # ── Learning rate & optimizer ──
+  - name: "General/lr0"
+    type: "uniform"
+    min:  0.0001
+    max:  0.01
+    step: 0.0001
+
+  - name: "General/lrf"
+    type: "uniform"
+    min:  0.001
+    max:  0.1
+    step: 0.005
+
+  - name: "General/weight_decay"
+    type: "uniform"
+    min:  0.0001
+    max:  0.005
+    step: 0.0001
+
+  - name: "General/warmup_epochs"
+    type: "uniform"
+    min:  1.0
+    max:  5.0
+    step: 0.5
+
+  # ── Data loading ──
+  - name: "General/batch"
+    type: "discrete"
+    values: [2, 4]
+
+  - name: "General/imgsz"
+    type: "discrete"
+    values: [128, 256]
+
+  # ── YOLO built-in augmentation ──
+  - name: "General/mosaic"
+    type: "uniform"
+    min:  0.0
+    max:  1.0
+    step: 0.1
+
+  - name: "General/mixup"
+    type: "uniform"
+    min:  0.0
+    max:  0.3
+    step: 0.05
+
+  - name: "General/copy_paste"
+    type: "uniform"
+    min:  0.0
+    max:  0.3
+    step: 0.05
+
+  # ── Regularization ──
+  - name: "General/dropout"
+    type: "uniform"
+    min:  0.0
+    max:  0.3
+    step: 0.05
+
+  # ── Class imbalance ──
+  - name: "General/cls_pw"
+    type: "uniform"
+    min:  0.0
+    max:  1.0
+    step: 0.1
+
+  # ── Geometric augmentation ──
+  - name: "General/degrees"
+    type: "uniform"
+    min:  0.0
+    max:  20.0
+    step: 2.0
+
+  - name: "General/translate"
+    type: "uniform"
+    min:  0.0
+    max:  0.3
+    step: 0.05
+
+  - name: "General/scale"
+    type: "uniform"
+    min:  0.2
+    max:  0.8
+    step: 0.1
