@@ -230,7 +230,7 @@ def setup_cuda(cuda_cfg: CUDAConfig):
     n_gpus = torch.cuda.device_count()
     for i in range(n_gpus):
         props = torch.cuda.get_device_properties(i)
-        vram  = props.total_mem / (1024 ** 3)
+        vram  = props.total_memory / (1024 ** 3)
         print(f"[CUDA] GPU {i}: {props.name}  |  {vram:.1f} GB VRAM  |  "
               f"Compute {props.major}.{props.minor}")
 
@@ -572,7 +572,7 @@ def init_clearml_task(cfg):
     gpu_info = "N/A"
     if torch.cuda.is_available():
         props = torch.cuda.get_device_properties(0)
-        gpu_info = f"{props.name} ({props.total_mem / (1024**3):.1f} GB)"
+        gpu_info = f"{props.name} ({props.total_memory / (1024**3):.1f} GB)"
     task.get_logger().report_text(
         f"GPU: {gpu_info}\n"
         f"PyTorch: {torch.__version__}  |  CUDA: {torch.version.cuda}\n"

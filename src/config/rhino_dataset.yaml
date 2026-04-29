@@ -1,0 +1,8 @@
+path: s3://wildtrack-rhino-dataset/yolo
+train: images/train
+val: images/val
+test: images/test
+nc: 2
+names:
+  0: 'RhinoBlack'
+  1: 'RhinoWhite'

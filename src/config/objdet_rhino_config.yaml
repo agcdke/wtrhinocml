@@ -9,7 +9,7 @@ pretrained: true
 task: "detect"
 
 # ── Data ──
-data_yaml: "https://wildtrack-rhino-dataset.s3.us-east-1.amazonaws.com/yolo/rhino_dataset.yaml"
+data_yaml: "/home/ubuntu/rhino_workspace/src/config/rhino_dataset.yaml"
 imgsz: 640
 
 # ── Training schedule ──
@@ -96,8 +96,8 @@ dataset:
   name: "Rhino-YOLO"
   description: "WildTrack Rhino YOLO (train/val/test)"
   classes:
-    - rhinoBlack
-    - rhinoWhite
+    - RhinoBlack
+    - RhinoWhite
   register_enabled: true
 
 
