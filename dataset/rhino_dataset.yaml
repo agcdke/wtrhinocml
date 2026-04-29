@@ -1,4 +1,4 @@
-path: s3://wildtrack-rhino-dataset/yolo
+path: /home/ubuntu/rhino_workspace/wtrhinocml/dataset/yolo
 train: images/train
 val: images/val
 test: images/test

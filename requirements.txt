@@ -6,3 +6,4 @@ psutil
 clearml
 ultralytics
 albumentations
+boto3
