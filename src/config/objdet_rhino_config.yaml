@@ -98,7 +98,7 @@ dataset:
   classes:
     - RhinoBlack
     - RhinoWhite
-  register_enabled: true
+  register_enabled: false
 
 
 # ─────────────────────────────────────────────────────────────
