@@ -1,4 +1,4 @@
-path: /home/ubuntu/rhino_workspace/wtrhinocml/dataset/yolo
+path: /home/ubuntu/rhino_workspace/wtrhinocml/rhino_dataset/yolo
 train: images/train
 val: images/val
 test: images/test
