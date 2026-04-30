@@ -9,7 +9,7 @@ pretrained: true
 task: "detect"
 
 # ── Data ──
-data_yaml: "/home/ubuntu/rhino_workspace/wtrhinocml/rhino_dataset/rhino_dataset.yaml"
+data_yaml: "/home/ubuntu/rhino_workspace/wtrhinocml/dataset/rhino_dataset.yaml"
 imgsz: 640
 
 # ── Training schedule ──
