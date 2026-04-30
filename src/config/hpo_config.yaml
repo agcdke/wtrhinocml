@@ -27,7 +27,7 @@ max_iter_per_job:        30
 min_iter_per_job:        5
 max_concurrent_tasks:    1
 total_max_jobs:          30
-time_limit_per_job_min:  120.0
+time_limit_per_job_min:  300.0
 pool_period_min:         5.0
 
 # ── Search strategy: "optuna", "bohb", "random", "grid" ──
@@ -80,11 +80,11 @@ search_space:
   # ── Data loading ──
   - name: "General/batch"
     type: "discrete"
-    values: [2, 4]
+    values: [8, 16]
 
   - name: "General/imgsz"
     type: "discrete"
-    values: [128, 256]
+    values: [480, 640]
 
   # ── YOLO built-in augmentation ──
   - name: "General/mosaic"

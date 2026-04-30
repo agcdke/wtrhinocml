@@ -13,11 +13,11 @@ data_yaml: "/home/ubuntu/rhino_workspace/wtrhinocml/dataset/yolo/rhino_dataset.y
 imgsz: 640
 
 # ── Training schedule ──
-epochs: 100
+epochs: 30
 batch: 8
 workers: 1
-patience: 50      # = epochs/2
-save_period: 10   # = epochs/10
+patience: 15      # = epochs/2
+save_period: 3   # = epochs/10
 
 # ── Optimizer ──
 optimizer: "AdamW"
